@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ul>
-      <li v-for="(todoItem, index) in todoItems" :key="todoItem.item" class="shadow">
+    <transition-group name="list" tag="ul">
+      <li v-for="(todoItem, index) in propsdata" :key="todoItem.item" class="shadow">
         <i
           class="fas fa-check checkBtn"
           :class="{checkBtnCompleted:todoItem.completed}"
@@ -12,36 +12,20 @@
           <i class="fas fa-trash"></i>
         </span>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 
 <script>
 export default {
-  data: function() {
-    return {
-      todoItems: []
-    };
-  },
+  props: ["propsdata"],
   methods: {
     removeTodo: function(todoItem, index) {
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
+      this.$emit("removeItem", todoItem, index);
     },
     toggleComplete: function(todoItem, index) {
-      todoItem.completed = !todoItem.completed;
-      localStorage.removeItem(todoItem.item);
-      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+      this.$emit("toggleItem", todoItem, index);
     }
-  },
-  created: function() {
-    if (localStorage.length !== 0)
-      for (var i = 0; i < localStorage.length; i++) {
-        if (localStorage.key(i) !== "loglevel:webpack-dev-server")
-          this.todoItems.push(
-            JSON.parse(localStorage.getItem(localStorage.key(i)))
-          );
-      }
   }
 };
 </script>
@@ -78,5 +62,15 @@ li {
 .removeBtn {
   margin-left: auto;
   color: #de4343;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
