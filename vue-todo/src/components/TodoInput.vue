@@ -20,17 +20,17 @@
 <script>
 import Modal from "./common/Modal.vue";
 export default {
-  data: function() {
+  data() {
     return {
       newTodoItem: "",
       showModal: false
     };
   },
   components: {
-    Modal: Modal
+    Modal
   },
   methods: {
-    addTodo: function() {
+    addTodo() {
       if (this.newTodoItem !== "") {
         this.$emit("addTodoItem", this.newTodoItem);
         this.clearInput();
@@ -38,7 +38,7 @@ export default {
         this.showModal = !this.showModal;
       }
     },
-    clearInput: function() {
+    clearInput() {
       this.newTodoItem = ""; //분할해준다 기능을
     }
   }
